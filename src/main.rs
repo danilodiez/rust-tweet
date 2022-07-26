@@ -1,19 +1,21 @@
 
 use std::env;
 use exitfailure::ExitFailure;
-use reqwest::Url;
-
-fn main() {
-    // that's how we get the args from the CLI
-    let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
-    get_tweets("pelota");
+use reqwest::Error;
+use scraper::{Html, Selector};
+struct User {
+    login: String,
+    id: u32,
 }
 
-async fn get_tweets (query: String) -> String {
-    let url = format!("https://twitter154.p.rapidapi.com/search/search", query);
-    let url = Url::parse(&*url)?;
-    let res = reqwest::get(url).await?.json().await?;
-    return res;
-}
+#[tokio::main]
+async fn main() -> Result<(), Error> {
+    let request_url = format!("https://api.github.com/repos/{owner}/{repo}/stargazers",
+                              owner = "rust-lang-nursery",
+                              repo = "rust-cookbook");
+    println!("get from: {}", request_url);
+    let response = reqwest::get(&request_url).await?;
 
+    println!("respuesta {:?}", response.json().await?);
+    Ok(())
+}
