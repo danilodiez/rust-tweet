@@ -11,7 +11,7 @@ fn main() {
 }
 
 async fn get_tweets (query: String) -> String {
-    let url = format!("https://twitter154.p.rapidapi.com/search/search", query, "8f0c0ea637mshc27624fe5b77293p127451jsn9531dd22a97f");
+    let url = format!("https://twitter154.p.rapidapi.com/search/search", query);
     let url = Url::parse(&*url)?;
     let res = reqwest::get(url).await?.json().await?;
     return res;
